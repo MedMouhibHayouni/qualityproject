@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Global Styles */
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 transition-colors duration-300;
+  }
+  body.dark {
+    @apply bg-darkBg text-gray-100;
+  }
+}
+
+@layer components {
+  /* Glassmorphism Classes */
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-lg rounded-xl overflow-hidden;
+  }
+  .dark .glass-card {
+    @apply bg-darkCard/80 border-gray-700/50 shadow-gray-900/50;
+  }
+  
+  /* Buttons */
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-dark text-white font-medium py-2 px-4 rounded-lg shadow-md transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 flex items-center justify-center space-x-2;
+  }
+  .btn-accent {
+    @apply bg-accent hover:bg-accent-dark text-white font-medium py-2 px-4 rounded-lg shadow-md transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 flex items-center justify-center space-x-2;
+  }
+
+  /* Form Inputs */
+  .input-field {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-colors duration-300 bg-white/50 backdrop-blur-sm;
+  }
+  .dark .input-field {
+    @apply bg-gray-800/50 border-gray-600 focus:ring-primary text-gray-100 placeholder-gray-400;
+  }
+}
+
+/* Base Angular Material Overrides for Dark Mode */
+.dark {
+  .mat-mdc-card {
+    background-color: theme('colors.darkCard') !important;
+    color: theme('colors.gray.100') !important;
+  }
+  .mdc-data-table__header-cell {
+    color: theme('colors.gray.300') !important;
+  }
+  .mdc-data-table__cell {
+    color: theme('colors.gray.100') !important;
+  }
+}
+
+/* Beautiful Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-600 rounded-full cursor-pointer transition-colors duration-300;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-500;
+}

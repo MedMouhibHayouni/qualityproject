@@ -1,0 +1,55 @@
+<div class="p-6">
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Ajouter un utilisateur</h1>
+    <button (click)="onSubmit()" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
+      Enregistrer
+    </button>
+  </div>
+
+  <div class="glass-card p-8 max-w-2xl mx-auto animate-fade-in">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nom</label>
+          <input type="text" formControlName="nom" class="input-field" placeholder="Entrez le nom">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Prénom</label>
+          <input type="text" formControlName="prenom" class="input-field" placeholder="Entrez le prénom">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+        <input type="email" formControlName="email" class="input-field" placeholder="exemple@mail.com">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Mot de passe</label>
+        <input type="password" formControlName="motDePasse" class="input-field" placeholder="Min. 6 caractères">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rôle</label>
+        <select formControlName="roleId" class="input-field select-field">
+          <option value="" disabled selected>Sélectionnez un rôle</option>
+          <option *ngFor="let role of roles" [value]="role.id">{{ role.nomRole }}</option>
+        </select>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <input type="checkbox" formControlName="actif" id="actif" class="rounded text-primary focus:ring-primary h-5 w-5">
+        <label for="actif" class="text-sm text-gray-700 dark:text-gray-300">Compte actif</label>
+      </div>
+
+      <div class="pt-4 flex justify-end space-x-4">
+        <button type="button" routerLink="/admin/users" class="px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+          Annuler
+        </button>
+        <button type="submit" [disabled]="userForm.invalid" class="px-6 py-2 bg-gradient-to-r from-primary to-accent text-white rounded-lg shadow-md hover:shadow-lg transition-all disabled:opacity-50">
+          Créer l'utilisateur
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

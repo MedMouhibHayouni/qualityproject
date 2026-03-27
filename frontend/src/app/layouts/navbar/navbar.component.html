@@ -1,0 +1,97 @@
+<nav class="bg-white dark:bg-darkCard border-b border-gray-200 dark:border-gray-700 h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+  <div class="flex-1 flex justify-between items-center">
+    <!-- Mobile Menu Button (if needed) -->
+    <div class="flex items-center lg:hidden">
+      <button class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+        <span class="material-icons">menu</span>
+      </button>
+    </div>
+
+    <!-- Title for Mobile / Empty Space for Desktop aligning -->
+    <div class="flex-1 flex justify-center lg:justify-start">
+      <span class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent lg:hidden">
+        Suivi Qualité
+      </span>
+    </div>
+
+    <!-- Right section: Actions & Profile -->
+    <div class="flex items-center space-x-4">
+      
+      <!-- Dark Mode Toggle -->
+      <button (click)="toggleDarkMode()" class="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+        <span class="material-icons" *ngIf="isDarkMode">light_mode</span>
+        <span class="material-icons" *ngIf="!isDarkMode">dark_mode</span>
+      </button>
+
+      <!-- Notifications placeholder (could link to another component) -->
+      <button class="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors relative">
+        <span class="material-icons">notifications</span>
+        <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-darkCard"></span>
+      </button>
+
+      <!-- Profile Dropdown Trigger -->
+      <div class="relative group" *ngIf="user$ | async as user">
+        <button class="flex items-center space-x-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-r from-primary to-accent flex items-center justify-center text-white font-bold text-sm shadow-inner">
+            {{ (user.nom || user.email).charAt(0).toUpperCase() }}
+          </div>
+          <div class="hidden md:block text-sm text-left">
+            <p class="text-gray-700 dark:text-gray-200 font-medium leading-none">{{ user.nom || user.email }}</p>
+            <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">{{ getUserRole(user).replace('_', ' ') }}</p>
+          </div>
+          <span class="material-icons text-gray-500 dark:text-gray-400 text-sm">expand_more</span>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-darkCard rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform origin-top-right scale-95 group-hover:scale-100">
+          <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-700 md:hidden">
+            <p class="text-sm text-gray-900 dark:text-gray-100">{{ user.nom || user.email }}</p>
+            <p class="text-xs text-gray-500 truncate">{{ user.email }}</p>
+          </div>
+          <a (click)="openProfileModal()" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer flex items-center">
+            <span class="material-icons text-sm mr-2">person</span> Mon Profil
+          </a>
+          <button (click)="logout()" class="w-full text-left block px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center">
+            <span class="material-icons text-sm mr-2">logout</span> Déconnexion
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</nav>
+<!-- Modifier Profil Modal -->
+<div *ngIf="showProfileModal" class="fixed inset-0 z-[100] flex items-center justify-center">
+  <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" (click)="closeProfileModal()"></div>
+  <div class="glass-card relative z-10 w-full max-w-md p-6 sm:p-8 m-4 animate-scale-up border border-gray-200 dark:border-gray-700 shadow-2xl">
+    <button (click)="closeProfileModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+      <span class="material-icons">close</span>
+    </button>
+    
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+      <span class="material-icons text-primary mr-3">manage_accounts</span>
+      Modifier Profil
+    </h2>
+
+    <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="space-y-5">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email (Lecture seule)</label>
+        <input type="email" formControlName="email" class="input-field bg-gray-100 dark:bg-gray-800 cursor-not-allowed text-gray-500">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nom *</label>
+        <input type="text" formControlName="nom" class="input-field" placeholder="Votre nom">
+        <span *ngIf="profileForm.get('nom')?.invalid && profileForm.get('nom')?.touched" class="text-xs text-red-500 mt-1">Ce champ est requis</span>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Prénom</label>
+        <input type="text" formControlName="prenom" class="input-field" placeholder="Votre prénom">
+      </div>
+
+      <div class="pt-4 flex justify-end space-x-3 border-t border-gray-100 dark:border-gray-800">
+        <button type="button" (click)="closeProfileModal()" class="btn-secondary">Annuler</button>
+        <button type="submit" class="btn-primary" [disabled]="profileForm.invalid">Enregistrer</button>
+      </div>
+    </form>
+  </div>
+</div>

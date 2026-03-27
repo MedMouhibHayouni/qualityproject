@@ -1,0 +1,35 @@
+<h2 mat-dialog-title class="text-2xl font-bold text-slate-900 mb-6">
+  Mise à jour du Suivi - {{ data.project.nomProjet }}
+</h2>
+
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="ficheForm" class="grid grid-cols-1 gap-6 pt-2">
+    <mat-form-field appearance="outline">
+      <mat-label>Taux d'Avancement (%)</mat-label>
+      <input matInput type="number" formControlName="avancement" min="0" max="100">
+      <mat-icon matSuffix class="text-slate-400">trending_up</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Problèmes Rencontrés</mat-label>
+      <textarea matInput formControlName="problemes" rows="3"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Décisions Coordonnées</mat-label>
+      <textarea matInput formControlName="decisions" rows="3"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Indicateurs de Performance</mat-label>
+      <textarea matInput formControlName="indicateurs" rows="2"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="pb-6 px-6">
+  <button mat-button class="rounded-xl px-6" (click)="onCancel()">Annuler</button>
+  <button mat-flat-button color="primary" class="rounded-xl px-8 shadow-lg shadow-primary-200" [disabled]="ficheForm.invalid" (click)="onSave()">
+    Soumettre la Fiche
+  </button>
+</mat-dialog-actions>
